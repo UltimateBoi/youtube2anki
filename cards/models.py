@@ -54,7 +54,7 @@ class Video(models.Model):
             video.title = details['title']
             video.channel = details['channel']
             video.duration = details['duration']
-            video.transcript = details['transcript']
+            video.transcript = details['transcript'] if details['transcript'] else "No transcript available"
             video.save()
         
         return video
@@ -75,4 +75,3 @@ class QuestionAnswer(models.Model):
     
     def __str__(self):
         return f"{self.question} - {self.answer}"
-

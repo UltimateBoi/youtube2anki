@@ -1,6 +1,7 @@
 from isodate import parse_duration
 import requests
 from youtube_transcript_api import YouTubeTranscriptApi
+import logging
 
 class YoutubeClient:
     def __init__(self, api_key):
@@ -12,8 +13,12 @@ class YoutubeClient:
         return r.json()
     
     def get_transcript(self, id):
-        t = YouTubeTranscriptApi.get_transcript(id)
-        return " ".join([x['text'] for x in t])
+        try:
+            t = YouTubeTranscriptApi.get_transcript(id)
+            return " ".join([x['text'] for x in t])
+        except YouTubeTranscriptApi.CouldNotRetrieveTranscript:
+            logging.warning(f"Could not retrieve transcript for video ID {id}. Subtitles might be disabled.")
+            return ""
     
     def get_details(self, id):
         data = self.get_data(id)
@@ -27,4 +32,3 @@ class YoutubeClient:
         }
         
         return details
-    

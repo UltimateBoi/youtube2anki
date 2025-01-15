@@ -50,6 +50,10 @@ def generate(request):
             context['qas'] = video.questionanswer_set.all()
 
         context['video'] = video
+
+        if video.transcript == "No transcript available":
+            context['error'] = "Transcript not available for this video"
+            template_name = 'cards/htmx/error.html'
     except Exception as e:
         context['error'] = str(e)
         template_name = 'cards/htmx/error.html'
